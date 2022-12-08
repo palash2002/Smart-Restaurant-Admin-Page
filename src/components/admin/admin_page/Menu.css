@@ -1,0 +1,155 @@
+.accordion-Item{
+    border: none;
+    margin-bottom: 6%;
+}
+
+.accordion-menu {
+    margin: 50px 10px;
+    /* box-shadow: 0px 3px 7px #c4c4c4, 0px -3px 7px #c4c4c4; */
+    /* border-radius: 15px; */
+    /* border: none; */
+    /* border: solid 1px #c4c4c4; */
+}
+
+.card {
+    border-bottom: solid 1px #c4c4c4;
+    display: flex;
+}
+
+.card-left {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 65%;
+    padding: 15px 0px;
+}
+
+.card-add-item {
+    display: flex;
+    justify-content:space-around;
+    align-items: center;
+    width: 60%;
+    height: 40px;
+    border: 2px solid black;
+    border-radius: 0.6rem;
+    margin: 0.5rem 0rem;
+    padding: 2px;
+}
+
+.veg {
+    height: 20px;
+    width: 20px;
+    border: solid 2px green;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.non-veg {
+    height: 20px;
+    width: 20px;
+    border: solid 2px rgb(180, 0, 0);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.circle-nv {
+    background-color: rgb(180, 0, 0);
+    width: 10px;
+    height: 10px;
+    border-radius: 5px;
+}
+
+.circle-v {
+    background-color: green;
+    width: 10px;
+    height: 10px;
+    border-radius: 5px;
+}
+
+.food-item-name {
+    font-size: larger;
+    font-weight: bold;
+    text-transform: capitalize;
+    /* text-shadow: 0px 1px 3px; */
+    color:rgb(54, 54, 54);
+}
+
+.food-item-description {
+    font-style: italic;
+    text-transform:capitalize;
+    /* text-align: left; */
+    padding-right: 10px;
+}
+
+.card-right {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 35%;
+}
+
+.chakra-icon css-n5gr1q {
+    height: 2px;
+    width: 2px;
+}
+
+.chakra-button css-bojgrl{
+    border: solid;
+}
+
+.food-item-image {
+    height: 70px;
+    width: 100%;
+    margin-bottom: 5px;
+    margin-top: 15px;
+    border-radius: 0.6rem;
+    /* border: solid 1px grey; */
+}
+
+.food-item-price {
+    font-weight: bold;
+    font-style: italic;
+}
+
+/* New styles - F */
+.add-item-button {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* padding: 1px; */
+    height: 100%;
+    font-weight: bold;
+    /* background-color: rgb(0, 152, 0); */
+    /* color: white; */
+}
+
+.page-container {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.type-title {
+    text-transform: capitalize;
+}
+
+.type-heading {
+    border-bottom: none;
+    /* border-bottom: solid 0.2px #c4c4c4; */
+    /* border: solid; */
+    border-radius: 15px;
+    box-shadow: 0px 5px 7px #c4c4c4;
+    clip-path: inset(3px, 0px, 3px, 0px)
+}
+
+.editableInput {
+    /* border: solid 2px red; */
+    width: fit-content;
+}
