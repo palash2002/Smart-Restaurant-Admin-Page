@@ -29,7 +29,7 @@ export default function AccordionMenu({ types }) {
             {typeList.map((type, index) => (
                 <>
                     <Stack direction="row" display="flex" width="100%" justifyContent="center" alignItems="center">
-                        <AccordionType 
+                        <AccordionType
                             key={nanoid()}
                             type={type}
                             index={index}
@@ -47,7 +47,9 @@ export default function AccordionMenu({ types }) {
     return (
         <div className="accordion-menu">
             {accordionMenu}
-            <AddItems />
+            <AddItems
+                types={typeList}
+            />
         </div>
     );
 }
