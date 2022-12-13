@@ -1,19 +1,23 @@
 import './App.css';
 import React from 'react'
-import Menu from './components/admin/admin_page/Menu';
-import { ChakraProvider } from '@chakra-ui/react';
+import Menu from './components/Menu/Menu';
+import {ChakraProvider} from '@chakra-ui/react';
+import {Test} from "./Test";
 
 
 function App() {
-  return (
-    <ChakraProvider>
-      <div className="App">
-        <Menu />
-        {/* hihih */}
-      </div>
-    </ChakraProvider>
+    console.log(process.env.REACT_APP_SERVER_URL)
 
-  );
+    return (
+        <ChakraProvider>
+            <div className="App">
+                <Menu/>
+                <Test/>
+            </div>
+
+        </ChakraProvider>
+
+    );
 }
 
 export default App;

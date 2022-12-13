@@ -1,23 +1,28 @@
-import React, { useState } from 'react'
+import React, {useState} from 'react'
 import "./AddItems.css"
-import { Button, ButtonGroup, Input } from '@chakra-ui/react'
-import { AddIcon } from '@chakra-ui/icons'
 import {
+    Button,
+    Center,
+    Input,
     Modal,
-    ModalOverlay,
-    ModalContent,
-    ModalHeader,
-    ModalFooter,
     ModalBody,
     ModalCloseButton,
-    useDisclosure, Text, Center, Stack
+    ModalContent,
+    ModalFooter,
+    ModalHeader,
+    ModalOverlay,
+    Select,
+    Stack,
+    Text,
+    useDisclosure
 } from '@chakra-ui/react'
-import { Select } from '@chakra-ui/react'
+import {AddIcon} from '@chakra-ui/icons'
 
-export default function AddItems({ types }) {
-    const { isOpen, onOpen, onClose } = useDisclosure()
-
-    const [newFoodDetails, setNewFoodDetails] = useState(() => { })
+export default function AddItems({types}) {
+    const {isOpen, onOpen, onClose} = useDisclosure()
+    // const types = useSelector(selectTypes())
+    const [newFoodDetails, setNewFoodDetails] = useState(() => {
+    })
     const [newType, setNewType] = useState(() => '')
     console.log(newFoodDetails)
     const handleChange = (index, value) => {
@@ -26,14 +31,12 @@ export default function AddItems({ types }) {
                 ...oldDetails,
                 name: value
             }))
-        }
-        else if (index === 2) {
+        } else if (index === 2) {
             setNewFoodDetails(oldDetails => ({
                 ...oldDetails,
                 price: value
             }))
-        }
-        else if (index === 3) {
+        } else if (index === 3) {
             setNewFoodDetails(oldDetails => ({
                 ...oldDetails,
                 type: value
@@ -43,29 +46,31 @@ export default function AddItems({ types }) {
 
     return (
         <div className='additems-outer'>
-            <Button rightIcon={<AddIcon />} colorScheme='teal' variant='outline' onClick={onOpen}>
+            <Button rightIcon={<AddIcon/>} colorScheme='teal' variant='outline' onClick={onOpen}>
                 Add Item
             </Button>
             <Modal isOpen={isOpen} onClose={onClose}>
-                <ModalOverlay />
+                <ModalOverlay/>
                 <ModalContent>
                     <ModalHeader>
                         <Center>Add Item</Center>
                     </ModalHeader>
-                    <ModalCloseButton />
+                    <ModalCloseButton/>
                     <ModalBody>
                         <Stack direction="row" display="flex" justifyContent="center" width="100%">
                             {/* <input type="file" /> */}
                             <Stack direction="column">
                                 <Stack direction="row" display="flex" alignItems="center">
                                     <Text width="30%">Name : </Text>
-                                    <Input width="70%" onChange={({ target }) => handleChange(1, target.value)} />
+                                    <Input width="70%" onChange={({target}) => handleChange(1, target.value)}/>
                                 </Stack>
                                 <Stack direction="row" display="flex" alignItems="center">
                                     <Text width="30%">Price : </Text>
-                                    <Input width="70%" onChange={({ target }) => handleChange(2, target.value)} />
+                                    <Input width="70%" onChange={({target}) => handleChange(2, target.value)}/>
                                 </Stack>
-                                <Stack direction="row" display="flex" alignItems="center" onChange={({ target }) => { handleChange(3, target.value) }}>
+                                <Stack direction="row" display="flex" alignItems="center" onChange={({target}) => {
+                                    handleChange(3, target.value)
+                                }}>
                                     <Text width="30%">Type : </Text>
                                     <Select placeholder='Select option' width="70%">
                                         {
@@ -80,7 +85,7 @@ export default function AddItems({ types }) {
                                     newFoodDetails && newFoodDetails.type === 'new' &&
                                     <Stack direction="row" display="flex" alignItems="center">
                                         <Text width="30%">New Type : </Text>
-                                        <Input width="70%" onChange={({ target }) => setNewType(target.value)} />
+                                        <Input width="70%" onChange={({target}) => setNewType(target.value)}/>
                                     </Stack>
                                 }
                             </Stack>
