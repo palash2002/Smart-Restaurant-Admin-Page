@@ -2,29 +2,35 @@ import React, {useState} from 'react'
 import {DeleteIcon, EditIcon} from "@chakra-ui/icons";
 import {
     Box,
+    Button,
+    Input,
+    InputGroup,
+    InputLeftElement,
     Modal,
-    ModalOverlay,
-    ModalContent,
-    ModalHeader,
-    ModalFooter,
     ModalBody,
     ModalCloseButton,
+    ModalContent,
+    ModalFooter,
+    ModalHeader,
+    ModalOverlay,
+    Select,
+    Textarea,
     useDisclosure,
-    Button, InputGroup, InputLeftElement, Input, Select, Textarea, useToast
+    useToast
 } from "@chakra-ui/react";
 import {FoodIcon, ImageIcon, PriceIcon} from "../Icons/Icons";
 import {useDispatch, useSelector} from "react-redux";
 import {selectTypes, updateFoodItem} from "../../features/menu/menuSlice";
 
 
-const FoodCard = ({id, name, description, price, veg, type, imgUrl, alertAction}) => {
+const FoodCard = ({id, name, description, price, veg, type, image, alertAction}) => {
 
     const toast = useToast()
 
     const existingTypes = useSelector(selectTypes)
     const dispatch = useDispatch()
 
-    const initialState = {id, name, description, price, veg, type, imgUrl}
+    const initialState = {id, name, description, price, veg, type, image}
 
     const [toUpdate, setUpdate] = useState(() => ({
         ...initialState,
@@ -76,7 +82,7 @@ const FoodCard = ({id, name, description, price, veg, type, imgUrl, alertAction}
     const setFoodUrl = ({target}) => {
         setUpdate(oldDetails => ({
             ...oldDetails,
-            imgUrl: target.value
+            image: target.value
         }))
     }
 
@@ -91,7 +97,6 @@ const FoodCard = ({id, name, description, price, veg, type, imgUrl, alertAction}
             foodItem.type = newType
         }
 
-        console.log(foodItem)
         const didUpdate = JSON.stringify(initialState) !== JSON.stringify(foodItem)
         if (didUpdate) {
             dispatch(updateFoodItem({
@@ -160,7 +165,7 @@ const FoodCard = ({id, name, description, price, veg, type, imgUrl, alertAction}
                             pointerEvents='none'
                             children={ImageIcon}
                         />
-                        <Input placeholder='Image URL' onChange={setFoodUrl} value={toUpdate.imgUrl}/>
+                        <Input placeholder='Image URL' onChange={setFoodUrl} value={toUpdate.image}/>
                     </InputGroup>
                 </ModalBody>
 
@@ -197,7 +202,9 @@ const FoodCard = ({id, name, description, price, veg, type, imgUrl, alertAction}
                     <EditIcon onClick={onOpen}/>
                     <DeleteIcon onClick={alertAction}/>
                 </Box>
-                <img className='food-item-image' src={imgUrl}/>
+                <div className='food-item-image-wrapper' alignSelf={"flex-end"}>
+                    <img className='food-item-image' src={image} alt={`${name}'s image`}/>
+                </div>
             </div>
             {UpdateElement}
 

@@ -5,110 +5,32 @@ import {
     AccordionItem,
     AccordionPanel,
     Box,
-    ButtonGroup,
-    Editable,
-    EditableInput,
-    EditablePreview,
-    IconButton,
-    Input,
     Spinner,
-    useDisclosure,
-    useEditableControls
+    useDisclosure
 } from '@chakra-ui/react';
-import {CheckIcon, CloseIcon, DeleteIcon, EditIcon} from '@chakra-ui/icons';
+import {DeleteIcon} from '@chakra-ui/icons';
 import {deleteType, selectMenu} from "../../features/menu/menuSlice";
 import {useDispatch, useSelector} from "react-redux";
 import FoodItem from "./FoodItem";
-import {AlertDialogForDeletion} from "./AlertDialogForDeletion";
+import {AlertDialogForModifications} from "./AlertDialogForModifications";
+import EditableType from "./EditableType";
 
 
 const AccordionType = ({type, index}) => {
+
+
     const [currentType, setCurrentType] = useState(() => type)
     const [deleting, setDeleting] = useState(() => false)
     const foodItems = useSelector(state => selectMenu(state)[type])
+
     const dispatch = useDispatch()
     const removeType = () => {
         setDeleting(true)
         dispatch(deleteType(type))
     }
 
-
     const {isOpen, onOpen, onClose} = useDisclosure()
     const cancelRef = React.useRef()
-
-    // const alertDialog = (
-    //     <>
-    //         <AlertDialog
-    //             isOpen={isOpen}
-    //             leastDestructiveRef={cancelRef}
-    //             onClose={onClose}
-    //         >
-    //             <AlertDialogOverlay>
-    //                 <AlertDialogContent>
-    //                     <AlertDialogHeader fontSize='lg' fontWeight='bold'>
-    //                         Delete {type}
-    //                     </AlertDialogHeader>
-    //
-    //                     <AlertDialogBody>
-    //                         Are you sure? You can't undo this action afterwards.
-    //                     </AlertDialogBody>
-    //
-    //                     <AlertDialogFooter>
-    //                         <Button ref={cancelRef} onClick={onClose}>
-    //                             Cancel
-    //                         </Button>
-    //                         <Button colorScheme='red' onClick={() => {
-    //                             onClose();
-    //                             removeType()
-    //                         }} ml={3}>
-    //                             Delete
-    //                         </Button>
-    //                     </AlertDialogFooter>
-    //                 </AlertDialogContent>
-    //             </AlertDialogOverlay>
-    //         </AlertDialog>
-    //     </>
-    // )
-
-
-    const handleChange = ({target}) => setCurrentType(target.value)
-    const confirmChange = ({target}) => {
-        console.log(currentType)
-        // setTypeList(oldList => (
-        //     [
-        //         ...oldList.slice(0, index),
-        //         currentType,
-        //         ...oldList.slice(index + 1)
-        //     ]
-        // ))
-    }
-
-    const [isEditingInput, setIsEditingInput] = useState(false)
-
-    function EditableControls() {
-
-        const {
-            isEditing,
-            getSubmitButtonProps,
-            getCancelButtonProps,
-            getEditButtonProps,
-        } = useEditableControls()
-
-        setIsEditingInput(isEditing)
-
-        return isEditing ? (
-            <ButtonGroup justifyContent='center' size='sm'>
-                <IconButton icon={<CheckIcon onClick={confirmChange}/>} {...getSubmitButtonProps()} />
-                <IconButton icon={<CloseIcon/>} {...getCancelButtonProps()} />
-            </ButtonGroup>
-
-        ) : (
-
-            <IconButton size='sm' icon={<EditIcon/>} {...getEditButtonProps()} />
-
-        )
-    }
-
 
     return (
         <>
@@ -118,43 +40,20 @@ const AccordionType = ({type, index}) => {
 
                         <Box margin={2}>
                             <AccordionButton>
-
-                                <Box className='type-title' flex='1' textAlign='left' fontSize='larger'
-                                     fontWeight='bold'
-                                     display='flex' justifyContent='center'>
-                                    <Editable
-                                        textAlign='center'
-                                        defaultValue={type}
-                                        fontSize='2xl'
-                                        isPreviewFocusable={false}
-                                        className='editableInput'
-                                        onClick={(e) => {
-                                            e.stopPropagation()
-                                        }}
-                                        value={isEditingInput ? currentType : type}
-                                    >
-                                        <EditablePreview/>
-
-                                        <Input
-                                            as={EditableInput}
-                                            onChange={handleChange}
-                                        />
-                                        <EditableControls/>
-                                    </Editable>
-                                </Box>
+                                <EditableType type={type}/>
                                 <AccordionIcon/>
                             </AccordionButton>
                             <DeleteIcon onClick={onOpen}/>
 
-                            <AlertDialogForDeletion
+                            <AlertDialogForModifications
                                 isOpen={isOpen}
                                 onOpen={onOpen}
                                 onClose={onClose}
                                 cancelRef={cancelRef}
-                                alertFor={type}
-                                remove={removeType}
+                                message={`Delete ${type}`}
+                                alertFunction={removeType}
+                                type={'Delete'}
                             />
-                            {/*{alertDialog}*/}
                         </Box>
                     </div>
 
@@ -162,22 +61,20 @@ const AccordionType = ({type, index}) => {
                     <AccordionPanel pb={4}>
                         {foodItems.map(food => (
                             <FoodItem
-                                id={food._id}
+                                id={food.id}
                                 name={food.name}
                                 description={food.description}
                                 price={food.price}
                                 veg={food.veg}
-                                type={type} key={food._id}
-                                imgUrl={food.image}
+                                type={type}
+                                key={food.id}
+                                image={food.image}
                                 deleteType={foodItems.length === 1 ? removeType : null}
                             />
                         ))}
                     </AccordionPanel>
                 </AccordionItem>
             }
-
-            {/*<addItems/>*/}
-
         </>
     )
 }

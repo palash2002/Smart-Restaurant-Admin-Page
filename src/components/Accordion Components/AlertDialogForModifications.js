@@ -5,10 +5,11 @@ import {
     AlertDialogContent,
     AlertDialogFooter,
     AlertDialogHeader,
-    AlertDialogOverlay, Button
+    AlertDialogOverlay,
+    Button
 } from "@chakra-ui/react";
 
-export const AlertDialogForDeletion = ({isOpen, onOpen, onClose, cancelRef, alertFor, remove}) => {
+export const AlertDialogForModifications = ({isOpen, onOpen, onClose, cancelRef, message, alertFunction, type}) => {
 
     return (
         <AlertDialog
@@ -19,7 +20,7 @@ export const AlertDialogForDeletion = ({isOpen, onOpen, onClose, cancelRef, aler
             <AlertDialogOverlay>
                 <AlertDialogContent>
                     <AlertDialogHeader fontSize='lg' fontWeight='bold'>
-                        Delete {alertFor}
+                        {message}
                     </AlertDialogHeader>
 
                     <AlertDialogBody>
@@ -32,9 +33,9 @@ export const AlertDialogForDeletion = ({isOpen, onOpen, onClose, cancelRef, aler
                         </Button>
                         <Button colorScheme='red' onClick={() => {
                             onClose();
-                            remove()
+                            alertFunction()
                         }} ml={3}>
-                            Delete
+                            {type}
                         </Button>
                     </AlertDialogFooter>
                 </AlertDialogContent>

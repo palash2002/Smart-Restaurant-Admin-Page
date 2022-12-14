@@ -3,6 +3,9 @@ import React from 'react'
 import Menu from './components/Menu/Menu';
 import {ChakraProvider} from '@chakra-ui/react';
 import {Test} from "./Test";
+import Toaster from "./components/Utils/Toaster";
+import Header from "./components/Header and Footer/Header";
+import Footer from "./components/Header and Footer/Footer";
 
 
 function App() {
@@ -11,8 +14,11 @@ function App() {
     return (
         <ChakraProvider>
             <div className="App">
+                <Header/>
                 <Menu/>
                 <Test/>
+                <Toaster/>
+                <Footer/>
             </div>
 
         </ChakraProvider>

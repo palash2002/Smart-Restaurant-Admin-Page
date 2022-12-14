@@ -1,12 +1,11 @@
 import React, {useState} from 'react'
-import {DeleteIcon} from "@chakra-ui/icons";
 import {useDispatch} from "react-redux";
 import {Spinner, useDisclosure} from '@chakra-ui/react';
-import {AlertDialogForDeletion} from "./AlertDialogForDeletion";
+import {AlertDialogForModifications} from "./AlertDialogForModifications";
 import {deleteFoodItem} from "../../features/menu/menuSlice";
 import FoodCard from "./FoodCard";
 
-const FoodItem = ({id, name, description, price, veg, type, imgUrl, deleteType}) => {
+const FoodItem = ({id, name, description, price, veg, type, image, deleteType}) => {
 
     const dispatch = useDispatch()
 
@@ -18,13 +17,11 @@ const FoodItem = ({id, name, description, price, veg, type, imgUrl, deleteType})
     const deleteFood = () => {
         setUnderDeletion(true)
         if (deleteType) {
-            console.log('deleting type')
             deleteType()
         } else {
-            console.log('deleting food')
             dispatch(deleteFoodItem({
                 type,
-                referenceId: id
+                id
             }))
         }
     }
@@ -40,17 +37,18 @@ const FoodItem = ({id, name, description, price, veg, type, imgUrl, deleteType})
                         price={price}
                         veg={veg}
                         type={type}
-                        imgUrl={imgUrl}
+                        image={image}
                         alertAction={onOpen}
                     />
 
-                    <AlertDialogForDeletion
+                    <AlertDialogForModifications
                         isOpen={isOpen}
                         onOpen={onOpen}
                         onClose={onClose}
                         cancelRef={cancelRef}
-                        alertFor={name}
-                        remove={deleteFood}
+                        message={`Delete ${name}`}
+                        alertFunction={deleteFood}
+                        type={'Delete'}
                     />
                 </>
             }

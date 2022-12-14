@@ -8,7 +8,10 @@ const initialState = {
     menuTypes: [],
     status: 'idle',
     error: null,
+    typeUnderDeletion: 'idle',
+    typeUnderUpdation: 'idle',
     foodUnderAddition: 'idle',
+    foodUnderDeletion: 'idle',
     foodUnderUpdation: 'idle'
 }
 
@@ -38,18 +41,17 @@ export const deleteType = createAsyncThunk('menu/deleteType', async (type, {disp
     }
 })
 
-export const deleteFoodItem = createAsyncThunk('menu/deleteFoodItem', async ({type, referenceId}) => {
+export const deleteFoodItem = createAsyncThunk('menu/deleteFoodItem', async ({type, id}) => {
     try {
-        console.log(type, referenceId)
         await fetch(`${server_url}/admin/remove-item`, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({referenceId})
+            body: JSON.stringify({id})
         })
-        return [type, referenceId]
+        return {type, id}
     } catch (err) {
         return err
     }
@@ -65,10 +67,10 @@ export const addFoodItem = createAsyncThunk('menu/addFoodItem', async (foodItem)
             },
             body: JSON.stringify(foodItem)
         })
-        const {_id} = await rawResponse.json()
+        const {id} = await rawResponse.json()
         return {
             ...foodItem,
-            _id
+            id
         }
     } catch (err) {
         return err
@@ -77,7 +79,6 @@ export const addFoodItem = createAsyncThunk('menu/addFoodItem', async (foodItem)
 
 export const updateFoodItem = createAsyncThunk('menu/updateFoodItem', async ({foodItem, oldType}) => {
     try {
-        console.log(foodItem)
         await fetch(`${server_url}/admin/update-item`, {
             method: 'POST',
             headers: {
@@ -86,15 +87,28 @@ export const updateFoodItem = createAsyncThunk('menu/updateFoodItem', async ({fo
             },
             body: JSON.stringify(foodItem)
         })
-        console.log(oldType)
-        const {imgUrl, id} = foodItem
-        delete foodItem.imgUrl
-        delete foodItem.id
 
-        foodItem.image = imgUrl
-        foodItem._id = id
+        return {foodItem, oldType}
+    } catch (err) {
+        return err
+    }
+})
 
-        return {newType: foodItem.type, id: foodItem._id, oldType, foodItem}
+export const updateType = createAsyncThunk('menu/updateType', async ({oldType, newType}) => {
+    try {
+        await fetch(`${server_url}/admin/update-type`, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                oldType,
+                newType
+            })
+        })
+
+        return {oldType, newType}
     } catch (err) {
         return err
     }
@@ -116,7 +130,8 @@ const menuSlice = createSlice({
             })
             .addCase(fetchMenu.fulfilled, (state, action) => {
                 state.status = 'succeeded'
-                state.menu = action.payload
+
+                state.menu = action.payload.menu
                 state.menuTypes = Object.keys(action.payload)
             })
             .addCase(fetchMenu.rejected, (state, action) => {
@@ -124,14 +139,15 @@ const menuSlice = createSlice({
                 state.error = action.payload
             })
 
+
             .addCase(deleteType.pending, (state, action) => {
-                state.deletingStatus = 'loading'
+                state.typeUnderDeletion = 'loading'
             })
             .addCase(deleteType.fulfilled, (state, action) => {
                 const type = action.payload
-                const typeIndex = state.menuTypes.indexOf(type)
                 delete state.menu[type]
-                state.menuTypes.splice(typeIndex, 1)
+                state.typeUnderDeletion = type
+                // state.typeUnderDeletion = 'idle'
             })
             .addCase(deleteType.rejected, (state, action) => {
 
@@ -142,8 +158,8 @@ const menuSlice = createSlice({
                 state.deletingStatus = 'loading'
             })
             .addCase(deleteFoodItem.fulfilled, (state, action) => {
-                const [type, id] = action.payload
-                const foodIndex = state.menu[type].findIndex(item => item._id === id)
+                const {type, id} = action.payload
+                const foodIndex = state.menu[type].findIndex(item => item.id === id)
                 state.menu[type].splice(foodIndex, 1)
             })
             .addCase(deleteFoodItem.rejected, (state, action) => {
@@ -156,18 +172,15 @@ const menuSlice = createSlice({
             })
             .addCase(addFoodItem.fulfilled, (state, action) => {
                 const foodItem = action.payload
-                console.log(foodItem)
                 const {type} = foodItem
 
                 if (!state.menu[type]) {
                     state.menu[type] = [foodItem]
-                    state.menuTypes.push(type)
                 } else {
                     state.menu[type].push(foodItem)
                 }
 
-                state.foodUnderAddition = 'added'
-                state.foodUnderAddition = 'idle'
+                state.foodUnderAddition = foodItem.name
             })
             .addCase(addFoodItem.rejected, (state, action) => {
 
@@ -177,35 +190,50 @@ const menuSlice = createSlice({
                 state.foodUnderUpdation = 'loading'
             })
             .addCase(updateFoodItem.fulfilled, (state, action) => {
-                const {newType, oldType, id, foodItem} = action.payload
-                console.log(newType, oldType, id)
-                const foodIndexInOldType = state.menu[oldType].findIndex(food => food._id === id)
+                const {oldType, foodItem} = action.payload
+                const {id, type} = foodItem
 
+                const foodIndexInOldType = state.menu[oldType].findIndex(food => food.id === id)
                 state.menu[oldType].splice(foodIndexInOldType, 1)
+
                 if (state.menu[oldType].length === 0) {
-                    const oldIndex = state.menuTypes.findIndex(type => type === oldType)
-                    state.menuTypes.splice(oldIndex, 1)
                     delete state.menu[oldType]
+                    state.typeUnderDeletion = oldType
                 }
-                if (!state.menu[newType]) {
-                    state.menuTypes.push(newType)
-                    state.menu[newType] = [foodItem]
+                if (!state.menu[type]) {
+                    state.menu[type] = [foodItem]
                 } else {
-                    state.menu[newType].push(foodItem)
+                    state.menu[type].push(foodItem)
                 }
 
-                state.foodUnderUpdation = 'updated'
-                state.foodUnderUpdation = 'idle'
+                state.foodUnderUpdation = foodItem.name
             })
             .addCase(updateFoodItem.rejected, (state, action) => {
 
             })
+
+            .addCase(updateType.pending, (state, action) => {
+                state.status = 'loading'
+            })
+            .addCase(updateType.fulfilled, (state, action) => {
+                const {oldType, newType} = action.payload
+                state.menu[newType] = state.menu[oldType]
+                delete state.menu[oldType]
+                state.typeUnderUpdation = oldType
+            })
+            .addCase(updateType.rejected, (state, action) => {
+                state.status = 'failed'
+                state.error = action.payload
+            })
+
     }
 })
 
 export default menuSlice.reducer
 
 export const selectMenu = state => state.menu.menu
-export const selectTypes = state => state.menu.menuTypes
+export const selectTypes = state => Object.keys(state.menu.menu)
 export const selectTypeUnderDeletion = state => state.menu.typeUnderDeletion
+export const selectTypeUnderUpdation = state => state.menu.typeUnderUpdation
 export const selectFoodAdditionStatus = state => state.menu.foodUnderAddition
+export const selectFoodUnderUpdation = state => state.menu.foodUnderUpdation

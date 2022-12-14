@@ -34,7 +34,7 @@ const AddFood = () => {
         type: '-3',
         veg: '-1',
         description: '',
-        imgUrl: ''
+        image: ''
     }))
     const [newType, setNewType] = useState(() => '')
 
@@ -55,7 +55,7 @@ const AddFood = () => {
             type: '-3',
             veg: '-1',
             description: '',
-            imgUrl: ''
+            image: ''
         })
         setNewType('')
         dispatch(addFoodItem(foodItem))
@@ -103,7 +103,7 @@ const AddFood = () => {
     const setFoodUrl = ({target}) => {
         setNewFoodDetails(oldDetails => ({
             ...oldDetails,
-            imgUrl: target.value
+            image: target.value
         }))
     }
 
@@ -168,7 +168,7 @@ const AddFood = () => {
                                 children={ImageIcon}
                             />
                             <Input placeholder='Image URL' onChange={setFoodUrl}
-                                   value={newFoodDetails.imgUrl}/>
+                                   value={newFoodDetails.image}/>
                         </InputGroup>
                     </ModalBody>
 
