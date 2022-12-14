@@ -213,7 +213,7 @@ const menuSlice = createSlice({
             })
 
             .addCase(updateType.pending, (state, action) => {
-                state.status = 'loading'
+                state.typeUnderUpdation = 'loading'
             })
             .addCase(updateType.fulfilled, (state, action) => {
                 const {oldType, newType} = action.payload
@@ -233,6 +233,7 @@ export default menuSlice.reducer
 
 export const selectMenu = state => state.menu.menu
 export const selectTypes = state => Object.keys(state.menu.menu)
+export const selectStatus = state => state.menu.status
 export const selectTypeUnderDeletion = state => state.menu.typeUnderDeletion
 export const selectTypeUnderUpdation = state => state.menu.typeUnderUpdation
 export const selectFoodAdditionStatus = state => state.menu.foodUnderAddition
