@@ -1,7 +1,7 @@
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import foodCard from "../../components/Accordion Components/FoodCard";
 
-const server_url = process.env.REACT_APP_SERVER_URL
+const serverUrl = process.env.REACT_APP_SERVER_URL
 
 const initialState = {
     menu: {},
@@ -17,7 +17,7 @@ const initialState = {
 
 export const fetchMenu = createAsyncThunk('menu/fetchMenu', async () => {
     try {
-        const res = await fetch(`${server_url}/admin/get-all-foods`)
+        const res = await fetch(`${serverUrl}/admin/get-all-foods`)
         return res.json()
     } catch (err) {
         return err
@@ -26,7 +26,7 @@ export const fetchMenu = createAsyncThunk('menu/fetchMenu', async () => {
 
 export const deleteType = createAsyncThunk('menu/deleteType', async (type, {dispatch}) => {
     try {
-        await fetch(`${server_url}/admin/remove-type`, {
+        await fetch(`${serverUrl}/admin/remove-type`, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -43,7 +43,7 @@ export const deleteType = createAsyncThunk('menu/deleteType', async (type, {disp
 
 export const deleteFoodItem = createAsyncThunk('menu/deleteFoodItem', async ({type, id}) => {
     try {
-        await fetch(`${server_url}/admin/remove-item`, {
+        await fetch(`${serverUrl}/admin/remove-item`, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -59,7 +59,7 @@ export const deleteFoodItem = createAsyncThunk('menu/deleteFoodItem', async ({ty
 
 export const addFoodItem = createAsyncThunk('menu/addFoodItem', async (foodItem) => {
     try {
-        const rawResponse = await fetch(`${server_url}/admin/add-item`, {
+        const rawResponse = await fetch(`${serverUrl}/admin/add-item`, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -79,7 +79,7 @@ export const addFoodItem = createAsyncThunk('menu/addFoodItem', async (foodItem)
 
 export const updateFoodItem = createAsyncThunk('menu/updateFoodItem', async ({foodItem, oldType}) => {
     try {
-        await fetch(`${server_url}/admin/update-item`, {
+        await fetch(`${serverUrl}/admin/update-item`, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -96,7 +96,7 @@ export const updateFoodItem = createAsyncThunk('menu/updateFoodItem', async ({fo
 
 export const updateType = createAsyncThunk('menu/updateType', async ({oldType, newType}) => {
     try {
-        await fetch(`${server_url}/admin/update-type`, {
+        await fetch(`${serverUrl}/admin/update-type`, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -123,7 +123,7 @@ const menuSlice = createSlice({
         //     state.typeUnderDeletion = action.payload.type
         // }
     },
-    extraReducers: (builder) => {
+    extraReducers: builder => {
         builder
             .addCase(fetchMenu.pending, (state, action) => {
                 state.status = 'loading'

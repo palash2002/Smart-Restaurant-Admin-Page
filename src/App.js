@@ -6,6 +6,7 @@ import {Test} from "./Test";
 import Toaster from "./components/Utils/Toaster";
 import Header from "./components/Header and Footer/Header";
 import Footer from "./components/Header and Footer/Footer";
+import LoginForm from "./components/Login Form/LoginForm";
 
 
 function App() {
@@ -14,11 +15,12 @@ function App() {
     return (
         <ChakraProvider>
             <div className="App">
-                <Header/>
-                <Menu/>
-                <Test/>
-                <Toaster/>
-                <Footer/>
+                {/*<Header/>*/}
+                {/*<Menu/>*/}
+                {/*<Test/>*/}
+                {/*<Toaster/>*/}
+                {/*<Footer/>*/}
+                <LoginForm/>
             </div>
 
         </ChakraProvider>
